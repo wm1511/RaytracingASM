@@ -32,11 +32,11 @@ namespace UI
 
         private void renderButton_Click(object sender, EventArgs e)
         {
-            Stopwatch sw = new();
-            RayTracing rt = new((int)size.Value, spp.Value, maxDepth.Value);
-
             if (size.Value % 4 != 0)
                 size.Value = (int)size.Value + 2 & ~3;
+
+            Stopwatch sw = new();
+            RayTracing rt = new((int)size.Value, spp.Value, maxDepth.Value);
 
             sw.Start();
             var bmpData = rt.Render(thread.Value);

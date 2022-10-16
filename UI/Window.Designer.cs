@@ -109,12 +109,12 @@
             0});
             this.size.Location = new System.Drawing.Point(12, 132);
             this.size.Maximum = new decimal(new int[] {
-            10240,
+            6400,
             0,
             0,
             0});
             this.size.Minimum = new decimal(new int[] {
-            40,
+            64,
             0,
             0,
             0});

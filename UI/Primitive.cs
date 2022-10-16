@@ -30,37 +30,38 @@ internal class Sphere : Primitive
 
     public override bool Hit(Ray ray, double tMin, double tMax, ref HitRecord record)
     {
-        //var oc = ray.Origin - _center;
-        //var a = Vec3.Dot(ray.Direction, ray.Direction);
-        //var b = Vec3.Dot(oc, ray.Direction);
-        //var c = Vec3.Dot(oc, oc) - _radius * _radius;
-        //var determinant = b * b - a * c;
+        var oc = ray.Origin - _center;
+        var a = Vec3.Dot(ray.Direction, ray.Direction);
+        var b = Vec3.Dot(oc, ray.Direction);
+        var c = Vec3.Dot(oc, oc) - _radius * _radius;
+        var determinant = b * b - a * c;
 
-        //if (determinant > 0)
-        //{
-        //    var sqrtDeterminant = Math.Sqrt(determinant);
-        //    var solution1 = (-b - sqrtDeterminant) / a;
-        //    if (solution1 < tMax && solution1 > 0.01)
-        //    {
-        //        record.T = solution1;
-        //        record.IntersectionPoint = ray.Origin + record.T * ray.Direction;
-        //        record.Normal = (record.IntersectionPoint - _center) / _radius;
-        //        record.Material = _material;
-        //        return true;
-        //    }
+        if (determinant > 0)
+        {
+            var sqrtDeterminant = Math.Sqrt(determinant);
+            var solution1 = (-b - sqrtDeterminant) / a;
+            if (solution1 < tMax && solution1 > 0.01)
+            {
+                record.T = solution1;
+                record.IntersectionPoint = ray.Origin + record.T * ray.Direction;
+                record.Normal = (record.IntersectionPoint - _center) / _radius;
+                record.Material = _material;
+                return true;
+            }
 
-        //    var solution2 = (-b + sqrtDeterminant) / a;
-        //    if (solution2 < tMax && solution2 > 0.01)
-        //    {
-        //        record.T = solution2;
-        //        record.IntersectionPoint = ray.Origin + record.T * ray.Direction;
-        //        record.Normal = (record.IntersectionPoint - _center) / _radius;
-        //        record.Material = _material;
-        //        return true;
-        //    }
-        //}
-        //return false;
+            var solution2 = (-b + sqrtDeterminant) / a;
+            if (solution2 < tMax && solution2 > 0.01)
+            {
+                record.T = solution2;
+                record.IntersectionPoint = ray.Origin + record.T * ray.Direction;
+                record.Normal = (record.IntersectionPoint - _center) / _radius;
+                record.Material = _material;
+                return true;
+            }
+        }
+        return false;
 
+        //TODO Przeniesienie do biblioteki i sprawdzenie przekazywania argumentów (prawdopodobnie tylko t z record)
         //var isIntersected = Intersection.IntersectSphere(ray.Origin, ray.Direction, ref _center, ref record.Normal, ref record.T, ref _radius, ref tMax, ref tMin);
         //if (isIntersected)
         //    record.Material = _material;

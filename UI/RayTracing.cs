@@ -1,4 +1,6 @@
 ﻿using LibCS;
+using System.Diagnostics;
+
 namespace UI;
 
 internal class RayTracing
@@ -60,9 +62,18 @@ internal class RayTracing
     {
         var result = new byte[3 * _size * _size];
 
-        //var chunkSize = _size / threadCount;
-        //var rest = _size % chunkSize;
-        //Debug.Assert(chunkSize * threadCount + rest == _size);
+        //TODO Zrobić podział na wątki (tablica z ilościami zadań na wątek i później przypisywanie tasków)
+        var rest = _size % threadCount;
+        var chunkSize = _size / threadCount;
+        int[] taskDistribution = Enumerable.Repeat(chunkSize, threadCount).ToArray();
+
+        for (var i = 0; i < rest; i++)
+            taskDistribution[i]++;
+
+        //var tasks = new List<Task>();
+        //for (var i = 0; i < taskDistribution.Length; i++)
+        //    for (var j = 0; j < taskDistribution[i]; j++)
+        //        tasks.Add(Task.Run(() => RenderLine(result, ));
 
         for (var i = _size - 1; i >= 0; i--)
         {

@@ -8,37 +8,43 @@ internal class Scene : Primitive
 
     public Scene()
     {
-        var glass = new Dielectric(1.5);
-        var metal = new Metal(new Vec3(0.6, 0.6, 0.6), 0.01);
-        var gray = new Diffuse(new Vec3(0.5, 0.5, 0.5));
-
-        var vUp = new Vec3(1, 0.83, -1.71) * 2;
-        var vFront = new Vec3(1, 0.01, -1.13) * 2;
-        var vLeft = new Vec3(1.5, 0.01, -2) * 2;
-        var vRight = new Vec3(0.5, 0.01, -2) * 2;
+        var tBaseUp = new Vec3(0, 0.82, 0);
+        var tBaseFront = new Vec3(0, 0, 0.58);
+        var tBaseLeft = new Vec3(0.5, 0, -0.29);
+        var tBaseRight = new Vec3(-0.5, 0, -0.29);
+        var sBaseCenter = new Vec3(0, 0.5, 0);
 
         var primitives = new Primitive[]
         {
-            new Triangle(vRight, vUp, vLeft, glass),
-            new Triangle(vRight, vFront, vUp, glass),
-            new Triangle(vUp, vFront, vLeft, glass),
-            new Triangle(vRight, vFront, vLeft, glass),
+            //new Triangle(tBaseRight, tBaseUp, tBaseLeft, glass),
+            //new Triangle(tBaseRight, tBaseFront, tBaseUp, glass),
+            //new Triangle(tBaseUp, tBaseFront, tBaseLeft, glass),
+            //new Triangle(tBaseRight, tBaseFront, tBaseLeft, glass),
 
-            new Sphere(new Vec3(1.5, 1.25, -2), 0.5, gray),
-            new Sphere(new Vec3(0, 1.25, -2), 0.5, glass),
-            new Sphere(new Vec3(-1.5, 1.25, -2), 0.5, metal),
-
-            new Sphere(new Vec3(0, -1000, 0), 1000, gray)
+            //new Sphere(new Vec3(1.5, 1.25, -2), 0.5, gray),
+            //new Sphere(new Vec3(0, 1.25, -2), 0.5, glass),
+            //new Sphere(new Vec3(-1.5, 1.25, -2), 0.5, metal),
         };
 
-        //for (var a = -11; a < 11; a++)
-        //{
-        //    for (var b = -11; b < 11; b++)
-        //    {
-        //        var chooseMaterial = _rng.NextDouble();
-        //        var center = new Vec3(a + 0.9 * _rng.NextDouble(), 0.2, b + 0.9 * _rng.NextDouble());
-        //    }
-        //}
+        primitives.Append(new Sphere(new Vec3(0, -1000, 0), 1000, new Diffuse(new Vec3(0.5, 0.5, 0.5))));
+
+        //TODO przerobienie sceny na losową
+        for (var a = -10; a < 10; a++)
+        {
+            for (var b = -10; b < 10; b++)
+            {
+                var randomMaterial = _rng.NextDouble();
+                Material material;
+                if (randomMaterial < 0.5)
+                    material = new Diffuse(new Vec3(_rng.NextDouble(), _rng.NextDouble(), _rng.NextDouble()));
+                else if (randomMaterial > 0.5 && randomMaterial < 0.75)
+                    material = new Dielectric(1.5 + randomMaterial < 0.625 ? 0.1 * randomMaterial : -0.1 * randomMaterial);
+                else
+                    material = new Metal(new Vec3(_rng.NextDouble(), _rng.NextDouble(), _rng.NextDouble()), 1 - randomMaterial);
+
+                var center = new Vec3(a + 0.9 * _rng.NextDouble(), 0.2, b + 0.9 * _rng.NextDouble());
+            }
+        }
 
         _world = primitives;
     }
