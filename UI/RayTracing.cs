@@ -1,5 +1,4 @@
 ﻿using LibCS;
-using System.Diagnostics;
 
 namespace UI;
 
@@ -37,48 +36,50 @@ internal class RayTracing
         return (1 - t) * new Vec3(1, 1, 1) + t * new Vec3(0.3, 0.7, 1);
     }
 
-    private void RenderLine(byte[] result, int lineNum)
+    private void RenderChunk(byte[] result, int startLine, int linesCount)
     {
-        for (var colNum = 0; colNum < _size; colNum++)
+        for (var lineNum = 0; lineNum < linesCount; lineNum++)
         {
-            var col = new Vec3(0, 0, 0);
-            for (var s = 0; s < _spp; s++)
+            for (var colNum = 0; colNum < _size; colNum++)
             {
-                var u = (colNum + _rng.NextDouble()) / _size;
-                var v = (lineNum + _rng.NextDouble()) / _size;
-                var ray = _camera.GetRay(u, v);
-                col += Color(ray, _scene, 0, _maxDepth);
+                var col = new Vec3(0, 0, 0);
+                for (var s = 0; s < _spp; s++)
+                {
+                    var u = (colNum + _rng.NextDouble()) / _size;
+                    var v = (startLine + lineNum + _rng.NextDouble()) / _size;
+                    var ray = _camera.GetRay(u, v);
+                    col += Color(ray, _scene, 0, _maxDepth);
+                }
+                        
+                col /= _spp;
+                var pos = 3 * ((startLine + lineNum) * _size + colNum);
+                result[pos] = (byte)(byte.MaxValue * Math.Sqrt(col.Z));
+                result[pos + 1] = (byte)(byte.MaxValue * Math.Sqrt(col.Y));
+                result[pos + 2] = (byte)(byte.MaxValue * Math.Sqrt(col.X));
             }
-                    
-            col /= _spp;
-            var pos = 3 * (lineNum * _size + colNum);
-            result[pos] = (byte)(byte.MaxValue * Math.Sqrt(col.Z));
-            result[pos + 1] = (byte)(byte.MaxValue * Math.Sqrt(col.Y));
-            result[pos + 2] = (byte)(byte.MaxValue * Math.Sqrt(col.X));
         }
     }
 
     public byte[] Render(int threadCount)
     {
         var result = new byte[3 * _size * _size];
+        var tasks = new List<Task>();
 
-        //TODO Zrobić podział na wątki (tablica z ilościami zadań na wątek i później przypisywanie tasków)
         var rest = _size % threadCount;
         var chunkSize = _size / threadCount;
-        int[] taskDistribution = Enumerable.Repeat(chunkSize, threadCount).ToArray();
+        var taskDistribution = Enumerable.Repeat(chunkSize, threadCount).ToArray();
 
         for (var i = 0; i < rest; i++)
             taskDistribution[i]++;
 
-        //var tasks = new List<Task>();
-        //for (var i = 0; i < taskDistribution.Length; i++)
-        //    for (var j = 0; j < taskDistribution[i]; j++)
-        //        tasks.Add(Task.Run(() => RenderLine(result, ));
-
-        for (var i = _size - 1; i >= 0; i--)
+        for (var i = 0; i < threadCount; i++)
         {
-            RenderLine(result, i);
+            var startLine = taskDistribution.Take(i).Sum();
+            var linesCount = taskDistribution[i];
+            tasks.Add(Task.Run(() => RenderChunk(result, startLine, linesCount)));
         }
+
+        Task.WaitAll(tasks.ToArray());
 
         return result;
     }
