@@ -1,4 +1,5 @@
-﻿using LibCS;
+﻿using System.Numerics;
+
 namespace UI;
 
 internal class Scene
@@ -8,47 +9,47 @@ internal class Scene
 
     public Scene()
     {
-        //var tBaseUp = new Vec3(0, 0.82, 0);
-        //var tBaseFront = new Vec3(0, 0, 0.58);
-        //var tBaseLeft = new Vec3(0.5, 0, -0.29);
-        //var tBaseRight = new Vec3(-0.5, 0, -0.29);
-        var sBaseCenter = new Vec3(0, 0, 0);
+        //var tBaseUp = new Vector3(0, 0.82, 0);
+        //var tBaseFront = new Vector3(0, 0, 0.58);
+        //var tBaseLeft = new Vector3(0.5, 0, -0.29);
+        //var tBaseRight = new Vector3(-0.5, 0, -0.29);
+        var sBaseCenter = new Vector3(0, 0, 0);
 
         var primitives = new List<Sphere>
         {
-            new(new Vec3(0, -1000, 0), 1000, new Diffuse(new Vec3(0.5, 0.5, 0.5)))
+            new(new Vector3(0, -1000, 0), 1000, new Diffuse(new Vector3(0.5f, 0.5f, 0.5f)))
         };
 
         for (var a = -10; a < 10; a++)
         {
             for (var b = -10; b < 10; b++)
             {
-                var randomMaterial = _rng.NextDouble();
-                var randomSize = 0.5 * _rng.NextDouble();
-                var randomSign = _rng.NextDouble();
+                var randomMaterial = (float)_rng.NextDouble();
+                var randomSize = 0.5f * (float)_rng.NextDouble();
+                var randomSign = (float)_rng.NextDouble();
                 Material material;
 
-                if (randomMaterial < 0.5)
+                if (randomMaterial < 0.5f)
                 {
-                    randomSign = 1.0;
-                    material = new Diffuse(new Vec3(_rng.NextDouble(), _rng.NextDouble(), _rng.NextDouble()));
+                    randomSign = 1;
+                    material = new Diffuse(new Vector3((float)_rng.NextDouble(), (float)_rng.NextDouble(), (float)_rng.NextDouble()));
                 }
-                else if (randomMaterial is > 0.5 and < 0.75)
+                else if (randomMaterial is > 0.5f and < 0.75f)
                 {
-                    randomSign = randomSign < 0.5 ? 1.0 : -1.0;
-                    material = new Dielectric(1.5 + 0.1 * randomMaterial * randomSign);
+                    randomSign = randomSign < 0.5f ? 1 : -1;
+                    material = new Dielectric(1.5f + 0.1f * randomMaterial * randomSign);
                 }
                 else
                 {
-                    randomSign = 1.0;
-                    material = new Metal(new Vec3(_rng.NextDouble(), _rng.NextDouble(), _rng.NextDouble()),
-                        0.05 * randomMaterial);
+                    randomSign = 1;
+                    material = new Metal(new Vector3((float)_rng.NextDouble(), (float)_rng.NextDouble(), (float)_rng.NextDouble()),
+                        0.05f * randomMaterial);
                 }
 
-                var offset = new Vec3(a + 0.5 * (_rng.NextDouble() - 0.5), randomSize, b + 0.5 * (_rng.NextDouble() - 0.5));
+                var offset = new Vector3(a + 0.5f * ((float)_rng.NextDouble() - 0.5f), randomSize, b + 0.5f * ((float)_rng.NextDouble() - 0.5f));
                 primitives.Add(new Sphere(sBaseCenter + offset, randomSign * randomSize, material));
 
-                //var offset = new Vec3(a + _rng.NextDouble() - 0.5, 0.01, b + _rng.NextDouble() - 0.5);
+                //var offset = new Vector3(a + (float)_rng.NextDouble() - 0.5, 0.01, b + (float)_rng.NextDouble() - 0.5);
                 //primitives.Add(new Triangle(randomSize * tBaseRight + offset, randomSize * tBaseUp + offset,
                 //    randomSize * tBaseLeft + offset, material));
                 //primitives.Add(new Triangle(randomSize * tBaseRight + offset, randomSize * tBaseFront + offset,
@@ -63,7 +64,7 @@ internal class Scene
         _world = primitives.ToArray();
     }
 
-    public bool Hit(Ray ray, double tMin, double tMax, ref HitRecord record)
+    public bool Hit(Ray ray, float tMax, ref HitRecord record)
     {
         var isHit = false;
         var closest = tMax;

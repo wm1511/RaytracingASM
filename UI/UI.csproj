@@ -9,7 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibCS\LibCS.csproj" />
+    <ProjectReference Include="..\LibAsm\LibAsm.vcxproj" />
+    <ProjectReference Include="..\LibCS\LibCs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

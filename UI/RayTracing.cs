@@ -1,4 +1,4 @@
-﻿using LibCS;
+﻿using System.Numerics;
 
 namespace UI;
 
@@ -21,19 +21,19 @@ internal class RayTracing
         _maxDepth = maxDepth;
     }
 
-    private static Vec3 Color(Ray ray, Scene world, int depth, int maxDepth)
+    private static Vector3 Color(Ray ray, Scene world, int depth, int maxDepth)
     {
         var record = new HitRecord();
 
-        if (world.Hit(ray, 0.001, double.MaxValue, ref record))
+        if (world.Hit(ray, float.MaxValue, ref record))
             return depth < maxDepth && 
                    record.Material.Scatter(ray, record, out var attenuation, out var scatterRay)
                 ? attenuation * Color(scatterRay, world, depth + 1, maxDepth)
-                : new Vec3(0, 0, 0);
+                : new Vector3(0, 0, 0);
 
-        var normalizedDirection = Vec3.Normalize(ray.Direction);
-        var t = 0.5 * (normalizedDirection.Y + 1);
-        return (1 - t) * new Vec3(1, 1, 1) + t * new Vec3(0.3, 0.7, 1);
+        var normalizedDirection = Vector3.Normalize(ray.Direction);
+        var t = 0.5f * (normalizedDirection.Y + 1);
+        return (1 - t) * new Vector3(1, 1, 1) + t * new Vector3(0.3f, 0.7f, 1);
     }
 
     private void RenderChunk(byte[] result, int startLine, int linesCount)
@@ -42,11 +42,11 @@ internal class RayTracing
         {
             for (var colNum = 0; colNum < _size; colNum++)
             {
-                var col = new Vec3(0, 0, 0);
+                var col = new Vector3(0, 0, 0);
                 for (var s = 0; s < _spp; s++)
                 {
-                    var u = (colNum + _rng.NextDouble()) / _size;
-                    var v = (startLine + lineNum + _rng.NextDouble()) / _size;
+                    var u = (colNum + (float)_rng.NextDouble()) / _size;
+                    var v = (startLine + lineNum + (float)_rng.NextDouble()) / _size;
                     var ray = _camera.GetRay(u, v);
                     col += Color(ray, _scene, 0, _maxDepth);
                 }

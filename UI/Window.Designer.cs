@@ -80,6 +80,7 @@
             this.libCs.TabStop = true;
             this.libCs.Text = "C#";
             this.libCs.UseVisualStyleBackColor = true;
+            this.libCs.CheckedChanged += new System.EventHandler(this.libCs_CheckedChanged);
             // 
             // libAsm
             // 
@@ -90,6 +91,7 @@
             this.libAsm.TabIndex = 0;
             this.libAsm.Text = "ASM";
             this.libAsm.UseVisualStyleBackColor = true;
+            this.libAsm.CheckedChanged += new System.EventHandler(this.libAsm_CheckedChanged);
             // 
             // sizeLabel
             // 

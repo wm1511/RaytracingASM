@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{DB3F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibCs", "LibCS\LibCs.csproj", "{FA09277D-B3AE-4707-95BB-6BF2CC9979A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibASM", "LibAsm\LibAsm.vcxproj", "{1D1B1602-A8A5-4DA4-94C8-B637A0C3D749}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibASM", "LibAsm\JALib.vcxproj", "{1D1B1602-A8A5-4DA4-94C8-B637A0C3D749}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

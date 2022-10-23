@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using LibCs;
 
 namespace UI
 {
@@ -56,6 +57,16 @@ namespace UI
         private void saveButton_Click(object sender, EventArgs e)
         {
             saveFileDialog.ShowDialog();
+        }
+
+        private void libAsm_CheckedChanged(object sender, EventArgs e)
+        {
+            Sphere.IntersectionFunc = Sphere.IntersectSphereAsm;
+        }
+
+        private void libCs_CheckedChanged(object sender, EventArgs e)
+        {
+            Sphere.IntersectionFunc = Intersection.IntersectSphereCs;
         }
     }
 }

@@ -1,26 +1,28 @@
-﻿namespace LibCS;
+﻿using System.Numerics;
+
+namespace LibCs;
 
 public static class Intersection
 {
-    public static double IntersectSphere(Vec3 origin, Vec3 direction, Vec3 center, double radius, double tMax)
+    public static float IntersectSphereCs(Vector3 origin, Vector3 direction, Vector3 center, float radius, float tMax)
     {
         var oc = origin - center;
-        var a = Vec3.Dot(direction, direction);
-        var b = Vec3.Dot(oc, direction);
-        var c = Vec3.Dot(oc, oc) - radius * radius;
+        var a = Vector3.Dot(direction, direction);
+        var b = Vector3.Dot(oc, direction);
+        var c = Vector3.Dot(oc, oc) - radius * radius;
         var determinant = b * b - a * c;
 
         if (determinant > 0)
         {
-            var sqrtDeterminant = Math.Sqrt(determinant);
+            var sqrtDeterminant = MathF.Sqrt(determinant);
             var solution1 = (-b - sqrtDeterminant) / a;
-            if (solution1 < tMax && solution1 > 0.001)
+            if (solution1 < tMax && solution1 > 0.001f)
                 return solution1;
 
             var solution2 = (-b + sqrtDeterminant) / a;
-            if (solution2 < tMax && solution2 > 0.001)
+            if (solution2 < tMax && solution2 > 0.001f)
                 return solution2;
         }
-        return 0.0;
+        return 0.0f;
     }
 }
