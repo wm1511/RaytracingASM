@@ -132,6 +132,9 @@
       <NoEntryPoint>true</NoEntryPoint>
       <ModuleDefinitionFile>Intersection.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>call copy $(SolutionDir)\x64\Debug\LibAsm.dll $(SolutionDir)\UI\bin\Debug\net6.0-windows\LibAsm.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -153,6 +156,9 @@
       <NoEntryPoint>true</NoEntryPoint>
       <ModuleDefinitionFile>Intersection.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>call copy $(SolutionDir)\x64\Release\LibAsm.dll $(SolutionDir)\UI\bin\Release\net6.0-windows\LibAsm.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Intersection.def" />

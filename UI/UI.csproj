@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibAsm\LibAsm.vcxproj" />
-    <ProjectReference Include="..\LibCS\LibCs.csproj" />
+    <ProjectReference Include="..\LibCs\LibCs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

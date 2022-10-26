@@ -9,10 +9,6 @@ internal class Scene
 
     public Scene()
     {
-        //var tBaseUp = new Vector3(0, 0.82, 0);
-        //var tBaseFront = new Vector3(0, 0, 0.58);
-        //var tBaseLeft = new Vector3(0.5, 0, -0.29);
-        //var tBaseRight = new Vector3(-0.5, 0, -0.29);
         var sBaseCenter = new Vector3(0, 0, 0);
 
         var primitives = new List<Sphere>
@@ -48,16 +44,6 @@ internal class Scene
 
                 var offset = new Vector3(a + 0.5f * ((float)_rng.NextDouble() - 0.5f), randomSize, b + 0.5f * ((float)_rng.NextDouble() - 0.5f));
                 primitives.Add(new Sphere(sBaseCenter + offset, randomSign * randomSize, material));
-
-                //var offset = new Vector3(a + (float)_rng.NextDouble() - 0.5, 0.01, b + (float)_rng.NextDouble() - 0.5);
-                //primitives.Add(new Triangle(randomSize * tBaseRight + offset, randomSize * tBaseUp + offset,
-                //    randomSize * tBaseLeft + offset, material));
-                //primitives.Add(new Triangle(randomSize * tBaseRight + offset, randomSize * tBaseFront + offset,
-                //    randomSize * tBaseUp + offset, material));
-                //primitives.Add(new Triangle(randomSize * tBaseUp + offset, randomSize * tBaseFront + offset,
-                //    randomSize * tBaseLeft + offset, material));
-                //primitives.Add(new Triangle(randomSize * tBaseRight + offset, randomSize * tBaseFront + offset,
-                //    randomSize * tBaseLeft + offset, material));
             }
         }
 
