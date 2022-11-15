@@ -4,11 +4,12 @@ namespace UI;
 
 internal class Camera
 {
-    private readonly Vector3 _lowerLeftCorner;
-    private readonly Vector3 _horizontal;
-    private readonly Vector3 _vertical;
-    private readonly Vector3 _origin;
+    private readonly Vector3 _lowerLeftCorner; // Po³o¿enie dolnego lewego rogu obrazu
+    private readonly Vector3 _horizontal; // Szerokoœæ obrazu
+    private readonly Vector3 _vertical; // Wysokoœæ obrazu
+    private readonly Vector3 _origin; // Punkt pocz¹tkowy promienia (po³o¿enie kamery)
 
+    // Tworzenie obiektu kamery i przypisywanie mu parametrów startowych
     public Camera()
     {
         _origin = new Vector3(0, 1, 0);
@@ -17,6 +18,7 @@ internal class Camera
         _lowerLeftCorner = _origin - _horizontal / 2 - _vertical / 2 - new Vector3(0, 0, 1);
     }
 
+    // Metoda zwraca obiekt promienia skierowany w kierunku przekazanych wspó³rzêdnych ekranu
     public Ray GetRay(float u, float v)
     {
         return new Ray(_origin, _lowerLeftCorner + u * _horizontal + v * _vertical - _origin);

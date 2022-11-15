@@ -4,6 +4,9 @@ namespace LibCs;
 
 public static class Intersection
 {
+    // Funkcja wyznacza odległość (t), po przebyciu której promień napotka punkt przecięcia z ze sferą umieszczoną
+    // w przestrzeni lub zwróci informację o braku przecięcia. Obliczona wartość jest wykorzystywana do dalszych
+    // obliczeń w celu wygenerowania obrazu.
     public static float IntersectSphereCs(Vector3 origin, Vector3 direction, Vector3 center, float radius, float tMax)
     {
         var oc = origin - center;

@@ -4,13 +4,12 @@ namespace UI;
 
 internal class Scene
 {
-    private readonly Sphere[] _world;
-    private readonly Random _rng = new();
+    private readonly Sphere[] _world; // Reprezentacja świata w postaci listy obiektów
+    private readonly Random _rng = new(); // Generator liczb pseudolosowych
 
+    // Generowanie losowej sceny
     public Scene()
     {
-        var sBaseCenter = new Vector3(0, 0, 0);
-
         var primitives = new List<Sphere>
         {
             new(new Vector3(0, -1000, 0), 1000, new Diffuse(new Vector3(0.5f, 0.5f, 0.5f)))
@@ -43,13 +42,14 @@ internal class Scene
                 }
 
                 var offset = new Vector3(a + 0.5f * ((float)_rng.NextDouble() - 0.5f), randomSize, b + 0.5f * ((float)_rng.NextDouble() - 0.5f));
-                primitives.Add(new Sphere(sBaseCenter + offset, randomSign * randomSize, material));
+                primitives.Add(new Sphere(new Vector3(0, 0, 0) + offset, randomSign * randomSize, material));
             }
         }
 
         _world = primitives.ToArray();
     }
 
+    // Sprawdzanie przecięcia promienia ze wszystkimi obiektami zawartymi w scenie
     public bool Hit(Ray ray, float tMax, ref HitRecord record)
     {
         var isHit = false;

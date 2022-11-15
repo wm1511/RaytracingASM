@@ -33,21 +33,25 @@ namespace UI
 
         private void renderButton_Click(object sender, EventArgs e)
         {
+            // Weryfikacja rozmiaru obrazu
             if (size.Value % 4 != 0)
                 size.Value = (int)size.Value + 2 & ~3;
 
             Stopwatch sw = new();
             RayTracing rt = new((int)size.Value, spp.Value, maxDepth.Value);
 
+            // Pomiar czasu raz wykonanie algorytmu
             sw.Start();
             var bmpData = rt.Render(thread.Value);
             sw.Stop();
 
+            // Zapis czasu wykonania
             var time = sw.Elapsed;
             var elapsedTime = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds / 10:00}";
             var library = libCs.Checked ? "C#" : "ASM";
             timeList.Items.Add($"Czas: {elapsedTime}, Wątki: {thread.Value}, Biblioteka: {library}");
 
+            // Tworzenie i prezentacja mapy bitowej
             var bmp = new Bmp((int)size.Value, bmpData);
             var bmpStream = new MemoryStream(bmp.ImageData);
             image.Image = Image.FromStream(bmpStream);

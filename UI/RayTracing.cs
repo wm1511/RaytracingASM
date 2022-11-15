@@ -4,12 +4,12 @@ namespace UI;
 
 internal class RayTracing
 {
-    private readonly Random _rng;
-    private readonly Scene _scene;
-    private readonly Camera _camera;
-    private readonly int _size;
-    private readonly int _spp;
-    private readonly int _maxDepth;
+    private readonly Random _rng; // Generator liczb pseudolosowych
+    private readonly Scene _scene; // Reprezentacja obiektów biorących udział w wykonaniu algorytmu
+    private readonly Camera _camera; // Obiekt kamery
+    private readonly int _size; // Wymiary obrazu
+    private readonly int _spp; // Ilość próbek na piksel
+    private readonly int _maxDepth; // Maksymalna głębokość rekurencji
 
     public RayTracing(int size, int spp, int maxDepth)
     {
@@ -21,6 +21,7 @@ internal class RayTracing
         _maxDepth = maxDepth;
     }
 
+    // Metoda wyznacza kolor piksela przez który przeszedł utworzony promień
     private static Vector3 Color(Ray ray, Scene world, int depth, int maxDepth)
     {
         var record = new HitRecord();
@@ -36,6 +37,7 @@ internal class RayTracing
         return (1 - t) * new Vector3(1, 1, 1) + t * new Vector3(0.3f, 0.7f, 1);
     }
 
+    // Metoda generuje i zapisuje jeden wiersz pikseli obrazu
     private void RenderChunk(byte[] result, int startLine, int linesCount)
     {
         for (var lineNum = 0; lineNum < linesCount; lineNum++)
@@ -60,6 +62,7 @@ internal class RayTracing
         }
     }
 
+    // Metoda dzieli obraz na części i przypisuje je po równo dla każdego utworzonego wątku
     public byte[] Render(int threadCount)
     {
         var result = new byte[3 * _size * _size];

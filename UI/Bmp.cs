@@ -2,11 +2,12 @@
 
 internal class Bmp
 {
-    private readonly int _rasterDataSize;
-    private readonly int _size;
-    private const int HeaderSize = 54;
-    public byte[] ImageData { get; }
+    private readonly int _rasterDataSize; // Rozmiar tablicy zawierającej dane obrazu
+    private readonly int _size; // Szerokość i wysokość obrazu w pikselach
+    private const int HeaderSize = 54; // Rozmiar nagłówka mapy bitowej
+    public byte[] ImageData { get; } // Dane mapy bitowej
 
+    // Funkcja tworzy mapę bitową o podanych wymiarach na podstawie przekazanych danych obrazu
     public Bmp(int size, byte[] rasterData)
     {
         _size = size;
@@ -16,6 +17,7 @@ internal class Bmp
         PrepareRasterData(rasterData);
     }
 
+    // Funkcja tworzy nagłówek mapy bitowej i zapisuje go na początku tablicy
     private void PrepareHeader()
     {
         ImageData[0] = 0x42;
@@ -37,6 +39,7 @@ internal class Bmp
         Array.Copy(BitConverter.GetBytes(0), 0, ImageData, 50, 4);
     }
 
+    // Funkcja scala nagłówek oraz dane obrazu
     private void PrepareRasterData(byte[] rasterData)
     {
         Array.Copy(rasterData, 0, ImageData, 54, _rasterDataSize);

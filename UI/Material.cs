@@ -4,10 +4,12 @@ namespace UI;
 
 internal abstract class Material
 {
-    protected static readonly Random Rng = new();
+    protected static readonly Random Rng = new(); // Generator liczb pseudolosowych
 
+    // Metoda oblicza parametry promienia odbitego od powierzchni z któr¹ nast¹pi³o przeciêcie oraz iloœæ zatrzymanego œwiat³a
     public abstract bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay);
 
+    // Metoda zwraca losowy wektor o pocz¹tku w centrum sfery i koñcu na jej powierzchni
     protected static Vector3 RandomInUnitSphere()
     {
         Vector3 p;
@@ -19,6 +21,7 @@ internal abstract class Material
         return p;
     }
 
+    // Metoda oblicza kierunek wektora powsta³ego przy przeciêciu promienia z obiektem refrakcyjnym
     protected static bool Refract(Vector3 v, Vector3 n, float invRefractionIndex, out Vector3 refractedDirection)
     {
         var uv = Vector3.Normalize(v);
@@ -35,8 +38,10 @@ internal abstract class Material
         return false;
     }
 
+    // Metoda oblicza kierunek wektora powsta³ego przy przeciêciu promienia z obiektem odbijaj¹cym œwiat³o
     protected static Vector3 Reflect(Vector3 direction, Vector3 normal) => direction - 2 * Vector3.Dot(direction, normal) * normal;
 
+    // Obliczanie aproksymacji Schlick'a dla przybli¿onej wartoœci wspó³czynnika Fresnel'a
     protected static float Schlick(float cosine, float refractionIndex)
     {
         var r0 = (1 - refractionIndex) / (1 + refractionIndex);
@@ -47,13 +52,14 @@ internal abstract class Material
 
 internal class Diffuse : Material
 {
-    private readonly Vector3 _diffuse;
+    private readonly Vector3 _diffuse; // Wektor reprezentuj¹cy kolor obiektu
 
     public Diffuse(Vector3 diffuse)
     {
         _diffuse = diffuse;
     }
 
+    // Obliczanie parametrów odbicia lambertowskiego 
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         var targetOnUnitSphere = rec.IntersectionPoint + rec.Normal + RandomInUnitSphere();
@@ -65,8 +71,8 @@ internal class Diffuse : Material
 
 internal class Metal : Material
 {
-    private readonly Vector3 _diffuse;
-    private readonly float _fuzziness;
+    private readonly Vector3 _diffuse; // Wektor reprezentuj¹cy kolor obiektu
+    private readonly float _fuzziness; // Wspó³czynnik matowoœci materia³u odbijaj¹cego œwiat³o
 
     public Metal(Vector3 diffuse, float fuzziness)
     {
@@ -74,6 +80,7 @@ internal class Metal : Material
         _fuzziness = fuzziness < 1 ? fuzziness : 1;
     } 
 
+    // Obliczanie parametrów odbicia promienia od materia³u metalicznego
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         var reflected = Reflect(Vector3.Normalize(incidentRay.Direction), rec.Normal);
@@ -85,13 +92,14 @@ internal class Metal : Material
 
 internal class Dielectric : Material
 {
-    private readonly float _refractionIndex;
+    private readonly float _refractionIndex; // Wspó³czynnik za³amania œwiat³a w obiekcie
 
     public Dielectric(float refractionIndex)
     {
         _refractionIndex = refractionIndex;
     }
 
+    // Obliczanie parametrów odbicia promienia od materia³u refrakcyjnego
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         attenuation = new Vector3(1, 1, 1);
