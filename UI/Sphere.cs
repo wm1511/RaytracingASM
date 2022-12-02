@@ -4,22 +4,22 @@ using System.Runtime.InteropServices;
 
 namespace UI;
 
-// Struktura przechowuj¹ca informacjê o przeciêciu promienia z obiektem
+// Struktura przechowujÄ…ca informacjÄ™ o przeciÄ™ciu promienia z obiektem
 internal struct HitRecord
 {
-    public float T; // Odleg³oœæ przeciêcia
-    public Vector3 IntersectionPoint; // Punkt przeciêcia
+    public float T; // OdlegÅ‚oÅ›Ä‡ przeciÄ™cia
+    public Vector3 IntersectionPoint; // Punkt przeciÄ™cia
     public Vector3 Normal; // Normalna obiektu
-    public Material Material; // Materia³ obiektu
+    public Material Material; // MateriaÅ‚ obiektu
 }
 
 internal class Sphere
 {
-    private readonly Vector3 _center; // Punkt œrodkowy sfery
-    private readonly float _radius; // Promieñ sfery
-    private readonly Material _material; // Materia³ sfery
+    private readonly Vector3 _center; // Punkt Å›rodkowy sfery
+    private readonly float _radius; // PromieÅ„ sfery
+    private readonly Material _material; // MateriaÅ‚ sfery
 
-    // Funkcja s³u¿¹ca do obliczenia odleg³oœci przeciêcia promienia z obiektem
+    // Funkcja sÅ‚uÅ¼Ä…ca do obliczenia odlegÅ‚oÅ›ci przeciÄ™cia promienia z obiektem
     public static Func<Vector3, Vector3, Vector3, float, float, float> IntersectionFunc = Intersection.IntersectSphereCs;
 
     public Sphere(Vector3 center, float radius, Material material)
@@ -29,7 +29,7 @@ internal class Sphere
         _material = material;
     }
 
-    // Metoda obliczaj¹ca odleg³oœæ przeciêcia promienia z obiektem oraz pozosta³e wymagane parametry
+    // Metoda obliczajÄ…ca odlegÅ‚oÅ›Ä‡ przeciÄ™cia promienia z obiektem oraz pozostaÅ‚e wymagane parametry
     public bool Hit(Ray ray, float tMax, ref HitRecord record)
     {
         record.T = IntersectionFunc(ray.Origin, ray.Direction, _center, _radius, tMax);

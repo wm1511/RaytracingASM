@@ -4,7 +4,7 @@
 ; a jej punktem krytycznym jest obliczanie przecięcia promienia z obiektami, które zawiera scena. Obliczane jest ono zarówno w
 ; dwóch bibliotekach - w języku C# oraz języku asemblera.
 ; Autor: Wiktor Merta, Informatyka, rok 3, sem. 5, gr. 5, data: 24.10.2022
-; Wersja: 0.1
+; Wersja: 1.0
 ;**********************************************************************************************************************************
 
 .const

@@ -6,22 +6,23 @@ internal abstract class Material
 {
     protected static readonly Random Rng = new(); // Generator liczb pseudolosowych
 
-    // Metoda oblicza parametry promienia odbitego od powierzchni z ktÛrπ nastπpi≥o przeciÍcie oraz iloúÊ zatrzymanego úwiat≥a
+    // Metoda oblicza parametry promienia odbitego od powierzchni z kt√≥rƒÖ nastƒÖpi≈Ço przeciƒôcie oraz ilo≈õƒá zatrzymanego ≈õwiat≈Ça
     public abstract bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay);
 
-    // Metoda zwraca losowy wektor o poczπtku w centrum sfery i koÒcu na jej powierzchni
+    // Metoda zwraca losowy wektor o poczƒÖtku w centrum sfery i ko≈Ñcu na jej powierzchni
     protected static Vector3 RandomInUnitSphere()
     {
         Vector3 p;
         do
         {
-            p = 2 * new Vector3((float)Rng.NextDouble(), (float)Rng.NextDouble(), (float)Rng.NextDouble()) - new Vector3(1, 1, 1);
+            p = 2 * new Vector3((float)Rng.NextDouble(), (float)Rng.NextDouble(), (float)Rng.NextDouble()) -
+                new Vector3(1, 1, 1);
         }
         while (p.LengthSquared() >= 1);
         return p;
     }
 
-    // Metoda oblicza kierunek wektora powsta≥ego przy przeciÍciu promienia z obiektem refrakcyjnym
+    // Metoda oblicza kierunek wektora powsta≈Çego przy przeciƒôciu promienia z obiektem refrakcyjnym
     protected static bool Refract(Vector3 v, Vector3 n, float invRefractionIndex, out Vector3 refractedDirection)
     {
         var uv = Vector3.Normalize(v);
@@ -38,10 +39,10 @@ internal abstract class Material
         return false;
     }
 
-    // Metoda oblicza kierunek wektora powsta≥ego przy przeciÍciu promienia z obiektem odbijajπcym úwiat≥o
+    // Metoda oblicza kierunek wektora powsta≈Çego przy przeciƒôciu promienia z obiektem odbijajƒÖcym ≈õwiat≈Ço
     protected static Vector3 Reflect(Vector3 direction, Vector3 normal) => direction - 2 * Vector3.Dot(direction, normal) * normal;
 
-    // Obliczanie aproksymacji Schlick'a dla przybliøonej wartoúci wspÛ≥czynnika Fresnel'a
+    // Obliczanie aproksymacji Schlick'a dla przybli≈ºonej warto≈õci wsp√≥≈Çczynnika Fresnel'a
     protected static float Schlick(float cosine, float refractionIndex)
     {
         var r0 = (1 - refractionIndex) / (1 + refractionIndex);
@@ -52,14 +53,14 @@ internal abstract class Material
 
 internal class Diffuse : Material
 {
-    private readonly Vector3 _diffuse; // Wektor reprezentujπcy kolor obiektu
+    private readonly Vector3 _diffuse; // Wektor reprezentujƒÖcy kolor obiektu
 
     public Diffuse(Vector3 diffuse)
     {
         _diffuse = diffuse;
     }
 
-    // Obliczanie parametrÛw odbicia lambertowskiego 
+    // Obliczanie parametr√≥w odbicia lambertowskiego 
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         var targetOnUnitSphere = rec.IntersectionPoint + rec.Normal + RandomInUnitSphere();
@@ -71,8 +72,8 @@ internal class Diffuse : Material
 
 internal class Metal : Material
 {
-    private readonly Vector3 _diffuse; // Wektor reprezentujπcy kolor obiektu
-    private readonly float _fuzziness; // WspÛ≥czynnik matowoúci materia≥u odbijajπcego úwiat≥o
+    private readonly Vector3 _diffuse; // Wektor reprezentujƒÖcy kolor obiektu
+    private readonly float _fuzziness; // Wsp√≥≈Çczynnik matowo≈õci materia≈Çu odbijajƒÖcego ≈õwiat≈Ço
 
     public Metal(Vector3 diffuse, float fuzziness)
     {
@@ -80,7 +81,7 @@ internal class Metal : Material
         _fuzziness = fuzziness < 1 ? fuzziness : 1;
     } 
 
-    // Obliczanie parametrÛw odbicia promienia od materia≥u metalicznego
+    // Obliczanie parametr√≥w odbicia promienia od materia≈Çu metalicznego
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         var reflected = Reflect(Vector3.Normalize(incidentRay.Direction), rec.Normal);
@@ -92,14 +93,14 @@ internal class Metal : Material
 
 internal class Dielectric : Material
 {
-    private readonly float _refractionIndex; // WspÛ≥czynnik za≥amania úwiat≥a w obiekcie
+    private readonly float _refractionIndex; // Wsp√≥≈Çczynnik za≈Çamania ≈õwiat≈Ça w obiekcie
 
     public Dielectric(float refractionIndex)
     {
         _refractionIndex = refractionIndex;
     }
 
-    // Obliczanie parametrÛw odbicia promienia od materia≥u refrakcyjnego
+    // Obliczanie parametr√≥w odbicia promienia od materia≈Çu refrakcyjnego
     public override bool Scatter(Ray incidentRay, HitRecord rec, out Vector3 attenuation, out Ray scatteredRay)
     {
         attenuation = new Vector3(1, 1, 1);
@@ -121,7 +122,8 @@ internal class Dielectric : Material
             cosine = -Vector3.Dot(incidentRay.Direction, rec.Normal) / incidentRay.Direction.Length();
         }
 
-        var reflectionProbability = Refract(incidentRay.Direction, outwardNormal, invRefractionIndex, out var refractedRay) 
+        var reflectionProbability =
+            Refract(incidentRay.Direction, outwardNormal, invRefractionIndex, out var refractedRay) 
             ? Schlick(cosine, _refractionIndex) 
             : 1;
 

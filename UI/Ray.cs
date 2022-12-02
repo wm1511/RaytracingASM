@@ -4,7 +4,7 @@ namespace UI;
 
 internal readonly struct Ray
 {
-    public Vector3 Origin { get; } // Pocz¹tek wektora
+    public Vector3 Origin { get; } // PoczÄ…tek wektora
     public Vector3 Direction { get; } // Kierunek wektora
 
     public Ray(Vector3 origin, Vector3 direction)

@@ -21,28 +21,28 @@ internal class Scene
             {
                 var randomMaterial = (float)_rng.NextDouble();
                 var randomSize = 0.5f * (float)_rng.NextDouble();
-                var randomSign = (float)_rng.NextDouble();
+                var sign = (float)_rng.NextDouble();
                 Material material;
 
                 if (randomMaterial < 0.5f)
                 {
-                    randomSign = 1;
+                    sign = 1;
                     material = new Diffuse(new Vector3((float)_rng.NextDouble(), (float)_rng.NextDouble(), (float)_rng.NextDouble()));
                 }
                 else if (randomMaterial is > 0.5f and < 0.75f)
                 {
-                    randomSign = randomSign < 0.5f ? 1 : -1;
-                    material = new Dielectric(1.5f + 0.1f * randomMaterial * randomSign);
+                    sign = sign < 0.5f ? 1 : -1;
+                    material = new Dielectric(1.5f + 0.1f * randomMaterial * sign);
                 }
                 else
                 {
-                    randomSign = 1;
+                    sign = 1;
                     material = new Metal(new Vector3((float)_rng.NextDouble(), (float)_rng.NextDouble(), (float)_rng.NextDouble()),
                         0.05f * randomMaterial);
                 }
 
                 var offset = new Vector3(a + 0.5f * ((float)_rng.NextDouble() - 0.5f), randomSize, b + 0.5f * ((float)_rng.NextDouble() - 0.5f));
-                primitives.Add(new Sphere(new Vector3(0, 0, 0) + offset, randomSign * randomSize, material));
+                primitives.Add(new Sphere(new Vector3(0, 0, 0) + offset, sign * randomSize, material));
             }
         }
 
