@@ -9,6 +9,9 @@ namespace UI
         {
             InitializeComponent();
             saveButton.Enabled = false;
+
+            thread.Value = Environment.ProcessorCount;
+            threadNumber.Text = thread.Value.ToString();
         }
 
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
